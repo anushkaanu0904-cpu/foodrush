@@ -1,0 +1,329 @@
+type http_request_result = 
+ record {
+   body: blob;
+   headers: vec http_header;
+   status: nat;
+ };
+type http_header = 
+ record {
+   name: text;
+   value: text;
+ };
+type _ImmutableObjectStorageRefillResult = 
+ record {
+   success: opt bool;
+   topped_up_amount: opt nat;
+ };
+type _ImmutableObjectStorageRefillInformation = record {
+                                                  proposed_top_up_amount:
+                                                   opt nat;};
+type _ImmutableObjectStorageCreateCertificateResult = 
+ record {
+   blob_hash: text;
+   method: text;
+ };
+type UserRole__1 = 
+ variant {
+   admin;
+   guest;
+   user;
+ };
+type UserRole = 
+ variant {
+   admin;
+   customer;
+   restaurant_owner;
+ };
+type UserProfileInput = 
+ record {
+   defaultAddress: text;
+   email: text;
+   name: text;
+   phone: text;
+ };
+type UserProfile = 
+ record {
+   createdAt: Timestamp;
+   defaultAddress: text;
+   email: text;
+   id: UserId;
+   isDeleted: bool;
+   name: text;
+   phone: text;
+   role: UserRole;
+ };
+type UserId = principal;
+type TransformationOutput = 
+ record {
+   body: blob;
+   headers: vec http_header;
+   status: nat;
+ };
+type TransformationInput = 
+ record {
+   context: blob;
+   response: http_request_result;
+ };
+type Timestamp = int;
+type StripeSessionStatus = 
+ variant {
+   completed: record {
+                response: text;
+                userPrincipal: opt text;
+              };
+   failed: record {error: text;};
+ };
+type StripeConfiguration = 
+ record {
+   allowedCountries: vec text;
+   secretKey: text;
+ };
+type SortOption = 
+ variant {
+   deliveryTime;
+   priceAsc;
+   priceDesc;
+   rating;
+ };
+type ShoppingItem = 
+ record {
+   currency: text;
+   priceInCents: nat;
+   productDescription: text;
+   productName: text;
+   quantity: nat;
+ };
+type SearchFilters = 
+ record {
+   category: opt text;
+   cuisineType: opt text;
+   dietaryTags: vec DietaryTag;
+   maxPrice: opt nat;
+   minPrice: opt nat;
+   minRating: opt float64;
+   searchQuery: opt text;
+   sortBy: opt SortOption;
+ };
+type ReviewInput = 
+ record {
+   comment: text;
+   orderId: OrderId;
+   rating: nat;
+   restaurantId: RestaurantId;
+ };
+type ReviewId = nat;
+type Review = 
+ record {
+   comment: text;
+   createdAt: Timestamp;
+   customerId: UserId;
+   customerName: text;
+   id: ReviewId;
+   orderId: OrderId;
+   rating: nat;
+   restaurantId: RestaurantId;
+ };
+type RestaurantSummary = 
+ record {
+   averageRating: float64;
+   cuisineType: text;
+   deliveryFee: nat;
+   deliveryTimeMinutes: nat;
+   id: RestaurantId;
+   image: ExternalBlob;
+   isActive: bool;
+   minimumOrder: nat;
+   name: text;
+   reviewCount: nat;
+ };
+type RestaurantRatingStats = 
+ record {
+   averageRating: float64;
+   restaurantId: RestaurantId;
+   reviewCount: nat;
+ };
+type RestaurantInput = 
+ record {
+   address: text;
+   cuisineType: text;
+   deliveryFee: nat;
+   deliveryTimeMinutes: nat;
+   description: text;
+   image: ExternalBlob;
+   minimumOrder: nat;
+   name: text;
+   operatingHours: OperatingHours;
+   ownerId: UserId;
+   phone: text;
+ };
+type RestaurantId = nat;
+type Restaurant = 
+ record {
+   address: text;
+   createdAt: Timestamp;
+   cuisineType: text;
+   deliveryFee: nat;
+   deliveryTimeMinutes: nat;
+   description: text;
+   id: RestaurantId;
+   image: ExternalBlob;
+   isActive: bool;
+   minimumOrder: nat;
+   name: text;
+   operatingHours: OperatingHours;
+   ownerId: UserId;
+   phone: text;
+   updatedAt: Timestamp;
+ };
+type PaymentStatus = 
+ variant {
+   failed;
+   paid;
+   pending;
+   refunded;
+ };
+type OrderStatus = 
+ variant {
+   cancelled;
+   delivered;
+   out_for_delivery;
+   pending;
+   preparing;
+ };
+type OrderItemInput = 
+ record {
+   foodItemId: FoodItemId;
+   quantity: nat;
+ };
+type OrderItem = 
+ record {
+   foodItemId: FoodItemId;
+   name: text;
+   price: nat;
+   quantity: nat;
+ };
+type OrderInput = 
+ record {
+   deliveryAddress: text;
+   items: vec OrderItemInput;
+   phone: text;
+   restaurantId: RestaurantId;
+   specialInstructions: text;
+   stripeSessionId: opt text;
+ };
+type OrderId = nat;
+type Order = 
+ record {
+   createdAt: Timestamp;
+   customerId: UserId;
+   deliveryAddress: text;
+   deliveryFee: nat;
+   id: OrderId;
+   items: vec OrderItem;
+   paymentStatus: PaymentStatus;
+   phone: text;
+   restaurantId: RestaurantId;
+   restaurantName: text;
+   specialInstructions: text;
+   status: OrderStatus;
+   stripeSessionId: opt text;
+   subtotal: nat;
+   taxes: nat;
+   total: nat;
+   updatedAt: Timestamp;
+ };
+type OperatingHours = 
+ record {
+   closeTime: text;
+   daysOpen: vec text;
+   openTime: text;
+ };
+type FoodItemInput = 
+ record {
+   category: text;
+   description: text;
+   dietaryTags: vec DietaryTag;
+   image: ExternalBlob;
+   name: text;
+   price: nat;
+   restaurantId: RestaurantId;
+ };
+type FoodItemId = nat;
+type FoodItem = 
+ record {
+   category: text;
+   createdAt: Timestamp;
+   description: text;
+   dietaryTags: vec DietaryTag;
+   id: FoodItemId;
+   image: ExternalBlob;
+   isAvailable: bool;
+   name: text;
+   price: nat;
+   restaurantId: RestaurantId;
+   updatedAt: Timestamp;
+ };
+type ExternalBlob = blob;
+type DietaryTag = 
+ variant {
+   dairy_free;
+   gluten_free;
+   halal;
+   spicy;
+   veg;
+   vegan;
+ };
+service : {
+  _immutableObjectStorageBlobsAreLive: (hashes: vec blob) -> (vec bool) query;
+  _immutableObjectStorageBlobsToDelete: () -> (vec blob) query;
+  _immutableObjectStorageConfirmBlobDeletion: (blobs: vec blob) -> ();
+  _immutableObjectStorageCreateCertificate: (blobHash: text) ->
+   (_ImmutableObjectStorageCreateCertificateResult);
+  _immutableObjectStorageRefillCashier: (refillInformation:
+   opt _ImmutableObjectStorageRefillInformation) ->
+   (_ImmutableObjectStorageRefillResult);
+  _immutableObjectStorageUpdateGatewayPrincipals: () -> ();
+  _initializeAccessControl: () -> ();
+  assignCallerUserRole: (user: principal, role: UserRole__1) -> ();
+  assignUserRole: (userId: UserId, role: UserRole) -> ();
+  confirmOrderPayment: (sessionId: text) -> ();
+  createCheckoutSession: (items: vec ShoppingItem, successUrl: text,
+   cancelUrl: text) -> (text);
+  createFoodItem: (input: FoodItemInput) -> (FoodItemId);
+  createRestaurant: (input: RestaurantInput) -> (RestaurantId);
+  deleteFoodItem: (foodItemId: FoodItemId) -> ();
+  deleteRestaurant: (restaurantId: RestaurantId) -> ();
+  deleteReview: (reviewId: ReviewId) -> ();
+  getCallerUserProfile: () -> (opt UserProfile) query;
+  getCallerUserRole: () -> (UserRole__1) query;
+  getFoodItem: (foodItemId: FoodItemId) -> (opt FoodItem) query;
+  getOrder: (orderId: OrderId) -> (opt Order) query;
+  getRestaurant: (restaurantId: RestaurantId) -> (opt Restaurant) query;
+  getRestaurantRatingStats: (restaurantId: RestaurantId) ->
+   (opt RestaurantRatingStats) query;
+  getStripeSessionStatus: (sessionId: text) -> (StripeSessionStatus);
+  getUserProfile: (userId: UserId) -> (opt UserProfile) query;
+  isCallerAdmin: () -> (bool) query;
+  isStripeConfigured: () -> (bool) query;
+  listAllOrders: (restaurantFilter: opt RestaurantId, statusFilter:
+   opt OrderStatus) -> (vec Order) query;
+  listAllReviews: () -> (vec Review) query;
+  listFoodItems: (restaurantId: RestaurantId) -> (vec FoodItem) query;
+  listMyOrders: (statusFilter: opt OrderStatus) -> (vec Order) query;
+  listRestaurantReviews: (restaurantId: RestaurantId) -> (vec Review) query;
+  listRestaurants: (filters: opt SearchFilters) ->
+   (vec RestaurantSummary) query;
+  listUsers: (roleFilter: opt UserRole) -> (vec UserProfile) query;
+  placeOrder: (input: OrderInput) -> (OrderId);
+  postReview: (input: ReviewInput) -> (ReviewId);
+  saveCallerUserProfile: (input: UserProfileInput) -> ();
+  searchFoodItems: (filters: SearchFilters) -> (vec FoodItem) query;
+  seedSampleData: () -> ();
+  setStripeConfiguration: (config: StripeConfiguration) -> ();
+  softDeleteUser: (userId: UserId) -> ();
+  transform: (input: TransformationInput) -> (TransformationOutput) query;
+  updateFoodItem: (foodItemId: FoodItemId, input: FoodItemInput) -> ();
+  updateOrderStatus: (orderId: OrderId, newStatus: OrderStatus) -> ();
+  updateRestaurant: (restaurantId: RestaurantId, input: RestaurantInput) ->
+   ();
+}

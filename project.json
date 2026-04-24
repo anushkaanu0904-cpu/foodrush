@@ -1,0 +1,29 @@
+{
+  "overview": "FoodRush is a full-stack food delivery platform inspired by Swiggy and Zomato. It lets customers browse restaurants, search and filter food items, add to cart, pay with Stripe, and track orders in real time. Admins can manage restaurants, menus, orders, and users from a dedicated dashboard.",
+  "features": [
+    "Internet Identity login with customer and admin roles",
+    "Browse restaurants with images, ratings, and cuisine types",
+    "Search and filter food by category, price, and rating",
+    "Shopping cart with quantity controls and order summary",
+    "Stripe payment integration with order confirmation",
+    "Order tracking: pending, preparing, out for delivery, delivered",
+    "Customer order history with expandable order details",
+    "Ratings and reviews after order delivery",
+    "Admin dashboard: manage restaurants, menus, orders, and users",
+    "Responsive mobile-first UI with Swiggy/Zomato design language"
+  ],
+  "category": "food-delivery",
+  "tags": [
+    "food-delivery",
+    "restaurant",
+    "e-commerce",
+    "stripe",
+    "admin-dashboard",
+    "order-tracking",
+    "ratings-reviews",
+    "tailwind",
+    "motoko",
+    "internet-identity"
+  ],
+  "last_updated": "2026-04-24T12:17:10.777Z"
+}
