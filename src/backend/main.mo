@@ -1,6 +1,7 @@
 import Map "mo:core/Map";
 import Principal "mo:core/Principal";
 import Time "mo:core/Time";
+import Text "mo:core/Text";
 import AccessControl "mo:caffeineai-authorization/access-control";
 import MixinAuthorization "mo:caffeineai-authorization/MixinAuthorization";
 import MixinObjectStorage "mo:caffeineai-object-storage/Mixin";
@@ -94,8 +95,8 @@ actor {
     if (not restaurants.isEmpty()) {
       Runtime.trap("Sample data already seeded");
     };
-    // Placeholder blobs for images — frontend replaces with real uploads
-    let emptyBlob : Blob = "" : Blob;
+    // Helper to encode image URLs as blobs
+    let urlBlob = func(url : Text) : Blob { url.encodeUtf8() };
 
     let hours : RestaurantTypes.OperatingHours = {
       openTime = "09:00";
@@ -107,7 +108,7 @@ actor {
       name = "Spice Garden";
       description = "Authentic Indian cuisine with rich flavors and aromatic spices.";
       cuisineType = "Indian";
-      image = emptyBlob;
+      image = urlBlob("https://images.unsplash.com/photo-1585937421612-70a008356fbe?w=800&q=80");
       address = "123 Curry Lane, Flavor Town";
       phone = "+1-555-0101";
       operatingHours = hours;
@@ -121,7 +122,7 @@ actor {
       name = "Burger Barn";
       description = "Juicy gourmet burgers and crispy fries made fresh daily.";
       cuisineType = "American";
-      image = emptyBlob;
+      image = urlBlob("https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=800&q=80");
       address = "456 Patty Blvd, Grill City";
       phone = "+1-555-0102";
       operatingHours = hours;
@@ -135,7 +136,7 @@ actor {
       name = "Sushi Sakura";
       description = "Fresh and delicate Japanese sushi crafted by master chefs.";
       cuisineType = "Japanese";
-      image = emptyBlob;
+      image = urlBlob("https://images.unsplash.com/photo-1579871494447-9811cf80d66c?w=800&q=80");
       address = "789 Sakura Street, Zen Quarter";
       phone = "+1-555-0103";
       operatingHours = hours;
@@ -149,7 +150,7 @@ actor {
       name = "Pizza Pronto";
       description = "Wood-fired artisan pizzas with the finest Italian ingredients.";
       cuisineType = "Italian";
-      image = emptyBlob;
+      image = urlBlob("https://images.unsplash.com/photo-1513104890138-7c749659a591?w=800&q=80");
       address = "321 Mozzarella Ave, Napoli District";
       phone = "+1-555-0104";
       operatingHours = hours;
@@ -163,7 +164,7 @@ actor {
       name = "Dragon Wok";
       description = "Classic Chinese dishes, dim sum, and noodles cooked to perfection.";
       cuisineType = "Chinese";
-      image = emptyBlob;
+      image = urlBlob("https://images.unsplash.com/photo-1563245372-f21724e3856d?w=800&q=80");
       address = "654 Wonton Way, Dragon District";
       phone = "+1-555-0105";
       operatingHours = hours;
@@ -231,28 +232,34 @@ actor {
     let r5Id = addRestaurant(r5Input);
 
     // Food items for Spice Garden
-    addFoodItem({ restaurantId = r1Id; name = "Butter Chicken"; description = "Creamy tomato-based chicken curry"; image = emptyBlob; price = 280; category = "Main Course"; dietaryTags = [#halal] });
-    addFoodItem({ restaurantId = r1Id; name = "Paneer Tikka"; description = "Grilled cottage cheese with spices"; image = emptyBlob; price = 220; category = "Starters"; dietaryTags = [#veg] });
-    addFoodItem({ restaurantId = r1Id; name = "Dal Makhani"; description = "Slow-cooked black lentils in butter"; image = emptyBlob; price = 180; category = "Main Course"; dietaryTags = [#veg] });
+    addFoodItem({ restaurantId = r1Id; name = "Butter Chicken"; description = "Creamy tomato-based chicken curry"; image = urlBlob("https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?w=600&q=80"); price = 280; category = "Main Course"; dietaryTags = [#halal] });
+    addFoodItem({ restaurantId = r1Id; name = "Paneer Tikka"; description = "Grilled cottage cheese with spices"; image = urlBlob("https://images.unsplash.com/photo-1567188040759-fb8a883dc6d8?w=600&q=80"); price = 220; category = "Starters"; dietaryTags = [#veg] });
+    addFoodItem({ restaurantId = r1Id; name = "Dal Makhani"; description = "Slow-cooked black lentils in butter"; image = urlBlob("https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=600&q=80"); price = 180; category = "Main Course"; dietaryTags = [#veg] });
 
     // Food items for Burger Barn
-    addFoodItem({ restaurantId = r2Id; name = "Classic Cheeseburger"; description = "Beef patty with cheddar and fresh veggies"; image = emptyBlob; price = 199; category = "Burgers"; dietaryTags = [] });
-    addFoodItem({ restaurantId = r2Id; name = "Crispy Fries"; description = "Golden fries with sea salt"; image = emptyBlob; price = 89; category = "Sides"; dietaryTags = [#veg, #vegan] });
-    addFoodItem({ restaurantId = r2Id; name = "Chicken Bacon Ranch Burger"; description = "Grilled chicken, crispy bacon, ranch sauce"; image = emptyBlob; price = 249; category = "Burgers"; dietaryTags = [] });
+    addFoodItem({ restaurantId = r2Id; name = "Classic Cheeseburger"; description = "Beef patty with cheddar and fresh veggies"; image = urlBlob("https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=600&q=80"); price = 199; category = "Burgers"; dietaryTags = [] });
+    addFoodItem({ restaurantId = r2Id; name = "Crispy Fries"; description = "Golden fries with sea salt"; image = urlBlob("https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=600&q=80"); price = 89; category = "Sides"; dietaryTags = [#veg, #vegan] });
+    addFoodItem({ restaurantId = r2Id; name = "Chicken Bacon Ranch Burger"; description = "Grilled chicken, crispy bacon, ranch sauce"; image = urlBlob("https://images.unsplash.com/photo-1553979459-d2229ba7433b?w=600&q=80"); price = 249; category = "Burgers"; dietaryTags = [] });
 
     // Food items for Sushi Sakura
-    addFoodItem({ restaurantId = r3Id; name = "Salmon Nigiri (8 pcs)"; description = "Fresh Atlantic salmon over seasoned rice"; image = emptyBlob; price = 360; category = "Nigiri"; dietaryTags = [#gluten_free] });
-    addFoodItem({ restaurantId = r3Id; name = "California Roll"; description = "Crab, avocado, and cucumber"; image = emptyBlob; price = 280; category = "Rolls"; dietaryTags = [] });
-    addFoodItem({ restaurantId = r3Id; name = "Miso Soup"; description = "Traditional Japanese miso with tofu and seaweed"; image = emptyBlob; price = 99; category = "Soups"; dietaryTags = [#vegan] });
+    addFoodItem({ restaurantId = r3Id; name = "Salmon Nigiri (8 pcs)"; description = "Fresh Atlantic salmon over seasoned rice"; image = urlBlob("https://images.unsplash.com/photo-1617196034183-421b4040ed20?w=600&q=80"); price = 360; category = "Nigiri"; dietaryTags = [#gluten_free] });
+    addFoodItem({ restaurantId = r3Id; name = "California Roll"; description = "Crab, avocado, and cucumber"; image = urlBlob("https://images.unsplash.com/photo-1562802378-063ec186a863?w=600&q=80"); price = 280; category = "Rolls"; dietaryTags = [] });
+    addFoodItem({ restaurantId = r3Id; name = "Miso Soup"; description = "Traditional Japanese miso with tofu and seaweed"; image = urlBlob("https://images.unsplash.com/photo-1547592166-23ac45744acd?w=600&q=80"); price = 99; category = "Soups"; dietaryTags = [#vegan] });
 
     // Food items for Pizza Pronto
-    addFoodItem({ restaurantId = r4Id; name = "Margherita Pizza"; description = "San Marzano tomatoes, fresh mozzarella, basil"; image = emptyBlob; price = 299; category = "Pizza"; dietaryTags = [#veg] });
-    addFoodItem({ restaurantId = r4Id; name = "Pepperoni Feast"; description = "Double pepperoni with extra cheese"; image = emptyBlob; price = 349; category = "Pizza"; dietaryTags = [] });
-    addFoodItem({ restaurantId = r4Id; name = "Tiramisu"; description = "Classic Italian dessert with espresso"; image = emptyBlob; price = 149; category = "Desserts"; dietaryTags = [#veg] });
+    addFoodItem({ restaurantId = r4Id; name = "Margherita Pizza"; description = "San Marzano tomatoes, fresh mozzarella, basil"; image = urlBlob("https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=600&q=80"); price = 299; category = "Pizza"; dietaryTags = [#veg] });
+    addFoodItem({ restaurantId = r4Id; name = "Pepperoni Feast"; description = "Double pepperoni with extra cheese"; image = urlBlob("https://images.unsplash.com/photo-1628840042765-356cda07504e?w=600&q=80"); price = 349; category = "Pizza"; dietaryTags = [] });
+    addFoodItem({ restaurantId = r4Id; name = "Tiramisu"; description = "Classic Italian dessert with espresso"; image = urlBlob("https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?w=600&q=80"); price = 149; category = "Desserts"; dietaryTags = [#veg] });
+    addFoodItem({ restaurantId = r4Id; name = "BBQ Chicken Pizza"; description = "Smoky BBQ sauce, grilled chicken, caramelized onions, mozzarella"; image = urlBlob("https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=600&q=80"); price = 369; category = "Pizza"; dietaryTags = [] });
+    addFoodItem({ restaurantId = r4Id; name = "Veggie Supreme"; description = "Bell peppers, mushrooms, olives, onions, cherry tomatoes on tomato base"; image = urlBlob("https://images.unsplash.com/photo-1571407970349-bc81e7e96d47?w=600&q=80"); price = 299; category = "Pizza"; dietaryTags = [#veg] });
+    addFoodItem({ restaurantId = r4Id; name = "Four Cheese Pizza"; description = "Mozzarella, parmesan, gorgonzola, and ricotta blend"; image = urlBlob("https://images.unsplash.com/photo-1520201163981-8cc95007dd2a?w=600&q=80"); price = 399; category = "Pizza"; dietaryTags = [#veg] });
+    addFoodItem({ restaurantId = r4Id; name = "Spicy Jalapeño Pizza"; description = "Jalapeños, chorizo, red onion, sriracha drizzle"; image = urlBlob("https://images.unsplash.com/photo-1593560708920-61dd98c46a4e?w=600&q=80"); price = 349; category = "Pizza"; dietaryTags = [#spicy] });
+    addFoodItem({ restaurantId = r4Id; name = "Mushroom Truffle Pizza"; description = "Wild mushrooms, truffle oil, arugula, shaved parmesan"; image = urlBlob("https://images.unsplash.com/photo-1542281286-9e0a16bb7366?w=600&q=80"); price = 419; category = "Pizza"; dietaryTags = [#veg] });
+    addFoodItem({ restaurantId = r4Id; name = "Hawaiian Pizza"; description = "Ham, pineapple chunks, mozzarella on a tomato base"; image = urlBlob("https://images.unsplash.com/photo-1565299507177-b0ac66763828?w=600&q=80"); price = 329; category = "Pizza"; dietaryTags = [] });
 
     // Food items for Dragon Wok
-    addFoodItem({ restaurantId = r5Id; name = "Kung Pao Chicken"; description = "Spicy stir-fried chicken with peanuts"; image = emptyBlob; price = 240; category = "Main Course"; dietaryTags = [#spicy] });
-    addFoodItem({ restaurantId = r5Id; name = "Dim Sum Basket (6 pcs)"; description = "Assorted steamed dumplings"; image = emptyBlob; price = 220; category = "Dim Sum"; dietaryTags = [] });
-    addFoodItem({ restaurantId = r5Id; name = "Vegetable Fried Rice"; description = "Wok-tossed rice with fresh vegetables"; image = emptyBlob; price = 160; category = "Rice"; dietaryTags = [#veg, #vegan] });
+    addFoodItem({ restaurantId = r5Id; name = "Kung Pao Chicken"; description = "Spicy stir-fried chicken with peanuts"; image = urlBlob("https://images.unsplash.com/photo-1603133872878-684f208fb84b?w=600&q=80"); price = 240; category = "Main Course"; dietaryTags = [#spicy] });
+    addFoodItem({ restaurantId = r5Id; name = "Dim Sum Basket (6 pcs)"; description = "Assorted steamed dumplings"; image = urlBlob("https://images.unsplash.com/photo-1563245372-f21724e3856d?w=600&q=80"); price = 220; category = "Dim Sum"; dietaryTags = [] });
+    addFoodItem({ restaurantId = r5Id; name = "Vegetable Fried Rice"; description = "Wok-tossed rice with fresh vegetables"; image = urlBlob("https://images.unsplash.com/photo-1512058564366-18510be2db19?w=600&q=80"); price = 160; category = "Rice"; dietaryTags = [#veg, #vegan] });
   };
 };
